@@ -1,0 +1,28 @@
+body{
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+}
+.container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid red;
+    width: 30%;
+    aspect-ratio: 1/1;
+    min-width: 250px;
+    min-height: 250px;
+    padding: 10px;
+}
+
+img {
+    max-width: 100%;
+}
+
+input {
+    border: black solid 2px;
+}

@@ -3,23 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
     <title>Document</title>
 </head>
 <body>
-    <img src="" alt="">
+    <div class="container">
+        <img src="" alt="">
+    </div>
+
+    <input type="text" placeholder="Search GIF" id="textInput">
     <button onclick="newImage()">New Image</button>
     <script>
          const img = document.querySelector('img');
+         let textInputDiv = document.getElementById('textInput');
 
-         newImage();
+         //newImage();
+
          function newImage() {
+            
+            let textInput = textInputDiv.value;
 
-            fetch('https://api.giphy.com/v1/gifs/translate?api_key=7FUQPnVjgPzyqxyhtgR9M6ld8ttCi6FB&s=cats', {mode : 'cors'})
+            // if (textInput === undefined) {
+                
+            // }
+            fetch(`https://api.giphy.com/v1/gifs/search?api_key=7FUQPnVjgPzyqxyhtgR9M6ld8ttCi6FB&q=${textInput}`, {mode : 'cors'})
              .then (function (response) {
                 return response.json();
              })
              .then(function(response){
-                img.src = (response.data.images.original.url);
+
+                let totalGifs = response.data.length - 1;
+                let selectedGif = Math.floor(Math.random() * (totalGifs - 0 + 1)) + 0;
+
+                img.src = (response.data[selectedGif].images.original.url);
              });
 
          }
