@@ -7,16 +7,24 @@
 </head>
 <body>
     <img src="" alt="">
+    <button onclick="newImage()">New Image</button>
     <script>
          const img = document.querySelector('img');
 
-         fetch('https://api.giphy.com/v1/gifs/translate?api_key=7FUQPnVjgPzyqxyhtgR9M6ld8ttCi6FB&s=cats', {mode : 'cors'})
-         .then (function (response) {
-            return response.json();
-         })
-         .then(function(response){
-            img.src = (response.data.images.original.url);
-         });
+         newImage();
+         function newImage() {
+
+            fetch('https://api.giphy.com/v1/gifs/translate?api_key=7FUQPnVjgPzyqxyhtgR9M6ld8ttCi6FB&s=cats', {mode : 'cors'})
+             .then (function (response) {
+                return response.json();
+             })
+             .then(function(response){
+                img.src = (response.data.images.original.url);
+             });
+
+         }
+             
+         
     </script>
 </body>
 </html>
