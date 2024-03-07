@@ -23,9 +23,10 @@
             
             let textInput = textInputDiv.value;
 
-            // if (textInput === undefined) {
-                
-            // }
+            if (textInput === '') {
+                textInput = 'Error';
+            }
+
             fetch(`https://api.giphy.com/v1/gifs/search?api_key=7FUQPnVjgPzyqxyhtgR9M6ld8ttCi6FB&q=${textInput}`, {mode : 'cors'})
              .then (function (response) {
                 return response.json();
@@ -33,9 +34,15 @@
              .then(function(response){
 
                 let totalGifs = response.data.length - 1;
-                let selectedGif = Math.floor(Math.random() * (totalGifs - 0 + 1)) + 0;
+                if (totalGifs > 0) {
 
-                img.src = (response.data[selectedGif].images.original.url);
+                    let selectedGif = Math.floor(Math.random() * (totalGifs - 0 + 1)) + 0;
+                    img.src = (response.data[selectedGif].images.original.url);
+                }
+                else{
+                    alert('No Gifs found');
+                }
+                
              });
 
          }
