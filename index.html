@@ -43,7 +43,8 @@
                     alert('No Gifs found');
                 }
                 
-             });
+             })
+             .catch(error => console.log('Error fetching data: ', error));
 
          }
              
