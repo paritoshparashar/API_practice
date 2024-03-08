@@ -7,38 +7,54 @@
     <title>Document</title>
 </head>
 <body>
+
+    <header>Script2Gif</header>
     <div class="container">
         <img src="" alt="">
     </div>
 
     <input type="text" placeholder="Search GIF" id="textInputDiv">
-    <button onclick="newImage()">New Image</button>
+    <button class="button-82-pushable" role="button" onclick="newImage()">
+        <span class="button-82-shadow"></span>
+        <span class="button-82-edge"></span>
+        <span class="button-82-front text">
+          Change
+        </span>
+      </button>
     <script>
-         const img = document.querySelector('img');
-         let textInputDiv = document.getElementById('textInputDiv');
-         let userInput;
-         let apiPromiseObject;
+        const img = document.querySelector('img');
+        let textInputDiv = document.getElementById('textInputDiv');
+        let userInput;
+        let apiPromiseObject = {};
 
-         function newImage() {
+        function calculateImageSource (){
 
-            
-            
+            let totalGifs = apiPromiseObject.data.length - 1;
+
+                if (totalGifs > 0) {
+                    let selectedGif = Math.floor(Math.random() * (totalGifs - 0 + 1)) + 0;
+                    img.src = (apiPromiseObject.data[selectedGif].images.original.url);
+                }
+
+                else{
+                    alert('No Gifs found');
+                }
+        }
+
+        function newImage() {
+        
             if (userInput === textInputDiv.value) {
                 //Don't call the fetch function again if the textInput is the same as in the previous call
-                let totalGifs = apiPromiseObject.data.length - 1;
-                        if (totalGifs > 0) {
-
-                            let selectedGif = Math.floor(Math.random() * (totalGifs - 0 + 1)) + 0;
-                            img.src = (apiPromiseObject.data[selectedGif].images.original.url);
-                        }
-                        else{
-                            alert('No Gifs found');
-                        }
+                calculateImageSource();
+                
             }
+
             else{
 
                 userInput = textInputDiv.value;
 
+                //Handle the corner case here, when the input field is empty initially - 
+                //Change it to Error to show error gifs, then revert back after receiving the JSON object
                 if (userInput === '') {
                     userInput = 'Error!';
                 }
@@ -46,33 +62,27 @@
                 fetch(`https://api.giphy.com/v1/gifs/search?api_key=7FUQPnVjgPzyqxyhtgR9M6ld8ttCi6FB&q=${userInput}`, {mode : 'cors'})
 
                     .then (function (response) {
-                    return response.json();
+                        return response.json();
+
                     })
                     .then(function(response){
 
                         apiPromiseObject = response;
-                        let totalGifs = apiPromiseObject.data.length - 1;
-                        if (totalGifs > 0) {
 
-                            let selectedGif = Math.floor(Math.random() * (totalGifs - 0 + 1)) + 0;
-                            img.src = (apiPromiseObject.data[selectedGif].images.original.url);
-
-                            if (userInput === 'Error!') {
-                                userInput = '';
-                            }
+                        //Reverting here
+                        if (userInput === 'Error!') {
+                            userInput = '';
                         }
-                        else{
-                            alert('No Gifs found');
-                        }
+                        calculateImageSource();
                     
                     })
                     .catch(error => console.log('Error fetching data: ', error));
 
             }
 
-            
+        
 
-         }
+        }
              
          
     </script>
