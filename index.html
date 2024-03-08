@@ -11,40 +11,66 @@
         <img src="" alt="">
     </div>
 
-    <input type="text" placeholder="Search GIF" id="textInput">
+    <input type="text" placeholder="Search GIF" id="textInputDiv">
     <button onclick="newImage()">New Image</button>
     <script>
          const img = document.querySelector('img');
-         let textInputDiv = document.getElementById('textInput');
-
-         //newImage();
+         let textInputDiv = document.getElementById('textInputDiv');
+         let userInput;
+         let apiPromiseObject;
 
          function newImage() {
+
             
-            let textInput = textInputDiv.value;
+            
+            if (userInput === textInputDiv.value) {
+                //Don't call the fetch function again if the textInput is the same as in the previous call
+                let totalGifs = apiPromiseObject.data.length - 1;
+                        if (totalGifs > 0) {
 
-            if (textInput === '') {
-                textInput = 'Error';
+                            let selectedGif = Math.floor(Math.random() * (totalGifs - 0 + 1)) + 0;
+                            img.src = (apiPromiseObject.data[selectedGif].images.original.url);
+                        }
+                        else{
+                            alert('No Gifs found');
+                        }
             }
+            else{
 
-            fetch(`https://api.giphy.com/v1/gifs/search?api_key=7FUQPnVjgPzyqxyhtgR9M6ld8ttCi6FB&q=${textInput}`, {mode : 'cors'})
-             .then (function (response) {
-                return response.json();
-             })
-             .then(function(response){
+                userInput = textInputDiv.value;
 
-                let totalGifs = response.data.length - 1;
-                if (totalGifs > 0) {
-
-                    let selectedGif = Math.floor(Math.random() * (totalGifs - 0 + 1)) + 0;
-                    img.src = (response.data[selectedGif].images.original.url);
-                }
-                else{
-                    alert('No Gifs found');
+                if (userInput === '') {
+                    userInput = 'Error!';
                 }
                 
-             })
-             .catch(error => console.log('Error fetching data: ', error));
+                fetch(`https://api.giphy.com/v1/gifs/search?api_key=7FUQPnVjgPzyqxyhtgR9M6ld8ttCi6FB&q=${userInput}`, {mode : 'cors'})
+
+                    .then (function (response) {
+                    return response.json();
+                    })
+                    .then(function(response){
+
+                        apiPromiseObject = response;
+                        let totalGifs = apiPromiseObject.data.length - 1;
+                        if (totalGifs > 0) {
+
+                            let selectedGif = Math.floor(Math.random() * (totalGifs - 0 + 1)) + 0;
+                            img.src = (apiPromiseObject.data[selectedGif].images.original.url);
+
+                            if (userInput === 'Error!') {
+                                userInput = '';
+                            }
+                        }
+                        else{
+                            alert('No Gifs found');
+                        }
+                    
+                    })
+                    .catch(error => console.log('Error fetching data: ', error));
+
+            }
+
+            
 
          }
              
