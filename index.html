@@ -33,7 +33,6 @@
 
                 if (totalGifs > 0) {
                     let selectedGif = Math.floor(Math.random() * (totalGifs - 0 + 1)) + 0;
-                    console.log(apiPromiseObject.data[selectedGif].images.original.url);
                     img.src = (apiPromiseObject.data[selectedGif].images.original.url);
                 }
 
