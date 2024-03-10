@@ -25,15 +25,15 @@
         const img = document.querySelector('img');
         let textInputDiv = document.getElementById('textInputDiv');
         let userInput;
-        let apiPromiseObject = {};
+        let apiJsonObj = {};
 
         function calculateImageSource (){
 
-            let totalGifs = apiPromiseObject.data.length - 1;
+            let totalGifs = apiJsonObj.data.length - 1;
 
                 if (totalGifs > 0) {
                     let selectedGif = Math.floor(Math.random() * (totalGifs - 0 + 1)) + 0;
-                    img.src = (apiPromiseObject.data[selectedGif].images.original.url);
+                    img.src = (apiJsonObj.data[selectedGif].images.original.url);
                 }
 
                 else{
@@ -41,44 +41,42 @@
                 }
         }
 
-        function newImage() {
+        async function newImage() {
         
-            if (userInput === textInputDiv.value) {
-                //Don't call the fetch function again if the textInput is the same as in the previous call
-                calculateImageSource();
+            try {
+                    if (userInput === textInputDiv.value) {
+                        //Don't call the fetch function again if the textInput is the same as in the previous call
+                        calculateImageSource();
+                        
+                    }
+
+                    else{
+
                 
-            }
+                        userInput = textInputDiv.value;
 
-            else{
-
-                userInput = textInputDiv.value;
-
-                //Handle the corner case here, when the input field is empty initially - 
-                //Change it to Error to show error gifs, then revert back after receiving the JSON object
-                if (userInput === '') {
-                    userInput = 'Error!';
-                }
-                
-                fetch(`https://api.giphy.com/v1/gifs/search?api_key=7FUQPnVjgPzyqxyhtgR9M6ld8ttCi6FB&q=${userInput}`, {mode : 'cors'})
-
-                    .then (function (response) {
-                        return response.json();
-
-                    })
-                    .then(function(response){
-
-                        apiPromiseObject = response;
-
+                        //Handle the corner case here, when the input field is empty initially - 
+                        //Change it to Error to show error gifs, then revert back after receiving the JSON object
+                        if (userInput === '') {
+                            userInput = 'Error!';
+                        }
+                        
+                        let response = await fetch(`https://api.giphy.com/v1/gifs/search?api_key=7FUQPnVjgPzyqxyhtgR9M6ld8ttCi6FB&q=${userInput}`, {mode : 'cors'});
+                        
+                        apiJsonObj = await response.json();
+                    
                         //Reverting here
                         if (userInput === 'Error!') {
                             userInput = '';
                         }
                         calculateImageSource();
+                        
+                    }    
                     
-                    })
-                    .catch(error => console.log('Error fetching data: ', error));
-
-            }
+                }   
+            catch( error) {
+                        console.log('Error fetching data: ', error)
+                    }
 
         
 
