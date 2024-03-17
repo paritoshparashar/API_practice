@@ -8,6 +8,8 @@
 </head>
 <body>
 
+    <div class="gif-grid"></div>
+
     <header>Script2Gif</header>
     <div class="container">
         <img src="" alt="">
@@ -35,6 +37,7 @@
                 if (totalGifs > 0) {
                     let selectedGif = Math.floor(Math.random() * (totalGifs - 0 + 1)) + 0;
                     img.src = (apiJsonObj.data[selectedGif].images.original.url);
+                    document.body.style.backgroundImage = "url('" + img.src + "')";
                 }
 
                 else{
